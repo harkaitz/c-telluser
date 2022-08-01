@@ -8,7 +8,6 @@
 #include <string.h>
 
 struct telluser {
-    struct usrio *next;
     char          type;
     char const   *key;
     char          msg[1];
@@ -25,7 +24,6 @@ struct telluser *telluser_new(char const *_key, char _type, char const *_fmt, va
     struct telluser *out = malloc(sizeof(struct telluser)+l);
     if (!out) return NULL;
 
-    out->next = NULL;
     out->type = _type;
     out->key  = _key;
     vsprintf(out->msg, _fmt, _va);
@@ -68,8 +66,7 @@ void telluser(char const *_key, char _type, char const *_fmt, ...) {
 __attribute__((weak))
 char telluser_chk_type (char const *_key) {
     struct telluser **L = __telluser_l;
-    size_t            P = __telluser_l_p;
-    for (size_t p = (P+1)%20; p != P; p = (p+1)%20) {
+    for (size_t c = 0, p = __telluser_l_p; c < 20; p = (p+1)%20, c++) {
         if (L[p] && !strcmp(L[p]->key, _key)) {
             return L[p]->type;
         }
@@ -80,8 +77,7 @@ char telluser_chk_type (char const *_key) {
 __attribute__((weak))
 bool telluser_pop_key (char const *_key, struct telluser **_m) {
     struct telluser **L = __telluser_l;
-    size_t            P = __telluser_l_p;
-    for (size_t p = (P+1)%20; p != P; p = (p+1)%20) {
+    for (size_t c = 0, p = __telluser_l_p; c < 20; p = (p+1)%20, c++) {
         if (L[p] && !strcmp(L[p]->key, _key)) {
             *_m = L[p];
             L[p] = NULL;
@@ -94,8 +90,7 @@ bool telluser_pop_key (char const *_key, struct telluser **_m) {
 __attribute__((weak))
 void telluser_pop_fp (char _type, FILE *_fp, const char *_opt_nl) {
     struct telluser **L = __telluser_l;
-    size_t            P = __telluser_l_p;
-    for (size_t p = (P+1)%20; p != P; p = (p+1)%20) {
+    for (size_t c = 0, p = __telluser_l_p; c < 20; p = (p+1)%20, c++) {
         if (L[p] && L[p]->type == _type) {
             fputs(L[p]->msg, _fp);
             if (_opt_nl) fputs(_opt_nl, _fp);
