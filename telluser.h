@@ -66,9 +66,9 @@ void telluser(char const *_key, char _type, char const *_fmt, ...) {
 __attribute__((weak))
 char telluser_chk_type (char const *_key) {
     struct telluser **L = __telluser_l;
-    for (size_t c = 0, p = __telluser_l_p; c < 20; p = (p+1)%20, c++) {
-        if (L[p] && !strcmp(L[p]->key, _key)) {
-            return L[p]->type;
+    for (size_t c = 0; c < 20; c++) {
+        if (L[c] && !strcmp(L[c]->key, _key)) {
+            return L[c]->type;
         }
     }
     return '\0';
