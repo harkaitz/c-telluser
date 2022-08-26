@@ -20,7 +20,8 @@ endif
 ifneq ($(PREFIX),)
 install: install-license
 install-license: LICENSE
-	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/c-telluser
-	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/c-telluser
+	@echo 'I share/doc/c-telluser/LICENSE'
+	@mkdir -p $(DESTDIR)$(PREFIX)/share/doc/c-telluser
+	@cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/c-telluser
 endif
 ## -- license --
